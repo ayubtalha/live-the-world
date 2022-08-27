@@ -1,1 +1,2 @@
-export * from './FormValidationRules';
+export * from './formValidationRules';
+export * from './helpers';

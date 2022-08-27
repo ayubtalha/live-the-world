@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Modal, Button, Input, Form, Alert } from 'antd';
 import ApiService from '../services/ApiService';
-import { FormValidationRules } from '../utils/FormValidationRules';
+import { formValidationRules } from '../utils/formValidationRules';
 
 const LoginPage = ({ loggedInUser = false }) => {
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ const LoginPage = ({ loggedInUser = false }) => {
               label='Email'
               name='identifier'
               rules={[
-                FormValidationRules.required('Email'),
-                FormValidationRules.isEmail(),
+                formValidationRules.required('Email'),
+                formValidationRules.isEmail(),
               ]}
             >
               <Input
@@ -58,7 +58,7 @@ const LoginPage = ({ loggedInUser = false }) => {
             <Form.Item
               label='Password'
               name='password'
-              rules={[FormValidationRules.required('Password')]}
+              rules={[formValidationRules.required('Password')]}
             >
               <Input.Password
                 placeholder='Password'

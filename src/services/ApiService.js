@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { LOG_IN } from '../constants/ApiEndpoints';
+import { LOG_IN, GET_ACTIVITIES } from '../constants/ApiEndpoints';
 
 class ApiService {
   async login(data) {
@@ -17,6 +17,18 @@ class ApiService {
           headers: { 'Content-Type': 'application/json' },
         }
       );
+      return response;
+    } catch (err) {
+      console.log('Error:', err);
+      return err.response;
+    }
+  }
+  async getActivities() {
+    let response = null;
+    try {
+      response = await axios.get(GET_ACTIVITIES, {
+        headers: { 'Content-Type': 'application/json' },
+      });
       return response;
     } catch (err) {
       console.log('Error:', err);
