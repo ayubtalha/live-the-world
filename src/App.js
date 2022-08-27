@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
-function App() {
+import './App.css';
+import { LoginPage, NotFoundPage } from './pages';
+import { unAuthLTWPath, isAuthLTWPath } from './routes/RoutesPaths';
+
+const App = () => {
+  const location = useLocation();
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  useEffect(() => {
+    setLoggedInUser(localStorage.getItem('user'));
+  }, [location]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {loggedInUser ? (
+        <Routes>
+          {isAuthLTWPath.map((route) => {
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            );
+          })}
+          <Route path='*' element={<NotFoundPage />} />
+        </Routes>
+      ) : (
+        <Routes>
+          {unAuthLTWPath.map((route) => {
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            );
+          })}
+          <Route path='*' element={<LoginPage />} />
+        </Routes>
+      )}
+    </>
   );
-}
+};
 
 export default App;
