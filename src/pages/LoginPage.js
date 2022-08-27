@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Row, Col, Card, Button, Input, Form, Alert } from 'antd';
+import { Row, Modal, Button, Input, Form, Alert } from 'antd';
 import ApiService from '../services/ApiService';
 import { FormValidationRules } from '../utils/FormValidationRules';
 
-const LoginPage = () => {
+const LoginPage = ({ loggedInUser = false }) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [alertMessage, setAlertMessage] = useState(false);
@@ -27,57 +27,52 @@ const LoginPage = () => {
 
   return (
     <>
-      <Row justify='space-around' align='middle' style={{ minHeight: '85vh' }}>
-        <Col>
-          <Form
-            form={form}
-            layout='vertical'
-            onFinish={onLoginFinish}
-            onFinishFailed={onLoginFailed}
-            autoComplete='on'
-            className='login-form'
-          >
-            <Card className='login-card'>
-              {alertMessage && (
-                <Alert message='Login Failed. Try Again' type='error' />
-              )}
-              <Row>
-                <Form.Item
-                  label='Email'
-                  name='identifier'
-                  rules={[
-                    FormValidationRules.required('Email'),
-                    FormValidationRules.isEmail(),
-                  ]}
-                >
-                  <Input
-                    placeholder='Email e.g jacob@yahoo.com'
-                    style={{ minWidth: '35vh' }}
-                  />
-                </Form.Item>
-              </Row>
-              <Row>
-                <Form.Item
-                  label='Password'
-                  name='password'
-                  rules={[FormValidationRules.required('Password')]}
-                >
-                  <Input.Password
-                    placeholder='Password'
-                    style={{ minWidth: '35vh' }}
-                  />
-                </Form.Item>
-              </Row>
-
-              <Form.Item>
-                <Button type='primary' htmlType='submit'>
-                  Log In
-                </Button>
-              </Form.Item>
-            </Card>
-          </Form>
-        </Col>
-      </Row>
+      <Modal title='Login Modal' visible={loggedInUser} footer={null}>
+        <Form
+          form={form}
+          layout='vertical'
+          onFinish={onLoginFinish}
+          onFinishFailed={onLoginFailed}
+          autoComplete='on'
+          className='login-form'
+        >
+          {alertMessage && (
+            <Alert message='Login Failed. Try Again' type='error' />
+          )}
+          <Row>
+            <Form.Item
+              label='Email'
+              name='identifier'
+              rules={[
+                FormValidationRules.required('Email'),
+                FormValidationRules.isEmail(),
+              ]}
+            >
+              <Input
+                placeholder='Email e.g jacob@yahoo.com'
+                style={{ minWidth: '35vh' }}
+              />
+            </Form.Item>
+          </Row>
+          <Row>
+            <Form.Item
+              label='Password'
+              name='password'
+              rules={[FormValidationRules.required('Password')]}
+            >
+              <Input.Password
+                placeholder='Password'
+                style={{ minWidth: '35vh' }}
+              />
+            </Form.Item>
+          </Row>
+          <Form.Item>
+            <Button type='primary' htmlType='submit'>
+              Log In
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };

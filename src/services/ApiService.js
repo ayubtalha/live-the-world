@@ -4,7 +4,6 @@ import { LOG_IN } from '../constants/ApiEndpoints';
 
 class ApiService {
   async login(data) {
-    console.log('ident', process.env.REACT_APP_IDENTIFIER);
     let response = null;
     try {
       response = await axios.post(
