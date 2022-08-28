@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-import { LOG_IN, GET_ACTIVITIES } from '../constants/ApiEndpoints';
+import {
+  LOG_IN,
+  GET_ACTIVITIES,
+  GET_TRIPS,
+  GET_NEARBY_ACTIVITY,
+} from '../constants/ApiEndpoints';
+import { getAuthHeader } from '../utils';
 
 class ApiService {
   async login(data) {
@@ -29,6 +35,29 @@ class ApiService {
       response = await axios.get(GET_ACTIVITIES, {
         headers: { 'Content-Type': 'application/json' },
       });
+      return response;
+    } catch (err) {
+      console.log('Error:', err);
+      return err.response;
+    }
+  }
+  async getTrips() {
+    let response = null;
+    try {
+      response = await axios.get(GET_TRIPS, getAuthHeader());
+      return response;
+    } catch (err) {
+      console.log('Error:', err);
+      return err.response;
+    }
+  }
+  async getNearbyActivity(activity_id) {
+    let response = null;
+    try {
+      response = await axios.get(
+        GET_NEARBY_ACTIVITY(activity_id),
+        getAuthHeader()
+      );
       return response;
     } catch (err) {
       console.log('Error:', err);

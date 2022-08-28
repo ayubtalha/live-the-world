@@ -14,3 +14,31 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+.row {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.card {
+  /*float: left;*/
+  max-width: 33.333%;
+  padding: 0.75rem;
+  margin-bottom: 2rem;
+  border: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.card > img {
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.card-text {
+  font-size: 85%;
+}
