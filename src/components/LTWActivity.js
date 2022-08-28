@@ -9,6 +9,8 @@ import { deviceType, responsive } from '../utils/helpers';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import Map, { Marker, NavigationControl, GeolocateControl } from 'react-map-gl';
 
 const { Meta } = Card;
 
@@ -21,6 +23,8 @@ export const LTWActivity = () => {
   const [currentActivity, setCurrentActivity] = useState({});
   const [thumbnails, setThumbNails] = useState([]);
   const [trips, setTrips] = useState([]);
+  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt') ? true : false;
@@ -40,6 +44,8 @@ export const LTWActivity = () => {
       ) {
         setCurrentActivity(getActivitiesResponse.data);
         setThumbNails(getActivitiesResponse.data.images);
+        setLat(getActivitiesResponse.data.latitude);
+        setLng(getActivitiesResponse.data.longitude);
 
         // GET NEARBY ACTIVITY
         let nearbyActivityResponse = await ApiService.getNearbyActivity(
@@ -90,6 +96,7 @@ export const LTWActivity = () => {
           <Button style={{ float: 'right', marginRight: 12 }} onClick={logout}>
             Save
           </Button>
+
           {/* ACTIVITIES */}
           <div>
             <Carousel
@@ -127,6 +134,7 @@ export const LTWActivity = () => {
               })}
             </Carousel>
           </div>
+
           {/* ACTIVITY TITLE */}
           <Row>
             <Col span={12}>
@@ -138,12 +146,36 @@ export const LTWActivity = () => {
               </div>
             </Col>
           </Row>
+
           {/* ACTIVITY DESCRIPTION SHORT */}
           <div style={{ fontWeight: 'bold' }}>
             {currentActivity.description_short}
           </div>
+
           {/* ACTIVITY DESCRIPTION LONG */}
           <div>{currentActivity.description_long}</div>
+
+          {/* MAPBOX */}
+          <div>
+            <Map
+              mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
+              style={{
+                width: '100%',
+                height: '400px',
+              }}
+              initialViewState={{
+                longitude: lng,
+                latitude: lat,
+                zoom: 14,
+              }}
+              mapStyle='mapbox://styles/mapbox/streets-v9'
+            >
+              <Marker longitude={lng} latitude={lat} />
+              <NavigationControl />
+              <GeolocateControl />
+            </Map>
+          </div>
+
           {/* NEARBY ACTIVITY */}
           <h1>Nearby Activities</h1>
           <div className='container'>
@@ -152,7 +184,7 @@ export const LTWActivity = () => {
                 return (
                   <div className='card' key={item.id}>
                     <Card
-                      extra={<a href='#'>Save</a>}
+                      // extra={<a href='#'>Save</a>}
                       hoverable
                       style={{
                         width: 240,
