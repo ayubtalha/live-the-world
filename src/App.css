@@ -42,3 +42,14 @@
 .card-text {
   font-size: 85%;
 }
+
+.spin-container {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 10em;
+}
