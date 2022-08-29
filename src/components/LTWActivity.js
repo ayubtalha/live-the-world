@@ -99,156 +99,170 @@ export const LTWActivity = () => {
 
   return (
     <div>
-      {!loggedInUser && <LoginPage loggedInUser={loggedInUser} />}
-      {showModalForCorrectUrl ? (
-        <Modal
-          title='Error Occured'
-          visible={showModalForCorrectUrl}
-          footer={null}
-          closable={false}
-        >
-          <p>Please enter the correct URL</p>
-        </Modal>
+      {!loggedInUser ? (
+        <LoginPage loggedInUser={!loggedInUser} />
       ) : (
         <>
-          {Object.keys(currentActivity).length > 0 ? (
-            <>
-              <h1>Live The World</h1>
-              <Button onClick={logout}>Logout</Button>
+          {showModalForCorrectUrl ? (
+            <Modal
+              title='Error Occured'
+              visible={showModalForCorrectUrl}
+              footer={null}
+              closable={false}
+            >
+              <p>Please enter the correct URL</p>
               <Button
-                style={{ float: 'right', marginRight: 12 }}
-                onClick={logout}
+                id='app-content-nf-button'
+                type='primary'
+                href='/activities/castle-of-gerald-the-devil'
               >
-                Save
+                Back Home
               </Button>
+            </Modal>
+          ) : (
+            <>
+              {Object.keys(currentActivity).length > 0 ? (
+                <>
+                  <h1>Live The World</h1>
+                  <Button onClick={logout}>Logout</Button>
+                  <Button
+                    style={{ float: 'right', marginRight: 12 }}
+                    onClick={logout}
+                  >
+                    Save
+                  </Button>
 
-              {/* ACTIVITIES */}
-              <div>
-                <Carousel
-                  swipeable={true}
-                  draggable={false}
-                  showDots={false}
-                  responsive={responsive}
-                  ssr={true}
-                  infinite={true}
-                  autoPlay={false}
-                  autoPlaySpeed={1000}
-                  keyBoardControl={true}
-                  customTransition='all .5'
-                  transitionDuration={500}
-                  containerClass='carousel-container'
-                  removeArrowOnDeviceType={['tablet', 'mobile']}
-                  deviceType={deviceType()}
-                  dotListClass='custom-dot-list-style'
-                  itemClass='carousel-item-padding-40-px'
-                >
-                  {thumbnails.map((item) => {
-                    return (
-                      <div key={item.id}>
-                        <img
-                          src={item.url}
-                          alt=''
-                          loading='lazy'
-                          style={{
-                            width: 600,
-                            height: 500,
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </Carousel>
-              </div>
-
-              {/* ACTIVITY TITLE */}
-              <Row>
-                <Col span={12}>
-                  <h1>{currentActivity.name}</h1>
+                  {/* ACTIVITIES */}
                   <div>
-                    {currentActivity.labels.map((label) => {
-                      return <Tag color='default'>{label.name}</Tag>;
-                    })}
-                  </div>
-                </Col>
-              </Row>
-
-              {/* ACTIVITY DESCRIPTION SHORT */}
-              <div style={{ fontWeight: 'bold' }}>
-                {currentActivity.description_short}
-              </div>
-
-              {/* ACTIVITY DESCRIPTION LONG */}
-              <div>{currentActivity.description_long}</div>
-
-              {/* MAPBOX */}
-              <div>
-                <Map
-                  mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
-                  style={{
-                    width: '100%',
-                    height: '400px',
-                  }}
-                  initialViewState={{
-                    longitude: lng,
-                    latitude: lat,
-                    zoom: 14,
-                  }}
-                  mapStyle='mapbox://styles/mapbox/streets-v9'
-                >
-                  <Marker longitude={lng} latitude={lat} />
-                  <NavigationControl />
-                  <GeolocateControl />
-                </Map>
-              </div>
-
-              {/* NEARBY ACTIVITY */}
-              <h1>Nearby Activities</h1>
-              <div className='container'>
-                <div className='row'>
-                  {trips.map((item) => {
-                    return (
-                      <div className='card' key={item.id}>
-                        <Card
-                          // extra={<a href='#'>Save</a>}
-                          hoverable
-                          style={{
-                            width: 240,
-                          }}
-                          cover={
+                    <Carousel
+                      swipeable={true}
+                      draggable={false}
+                      showDots={false}
+                      responsive={responsive}
+                      ssr={true}
+                      infinite={true}
+                      autoPlay={false}
+                      autoPlaySpeed={1000}
+                      keyBoardControl={true}
+                      customTransition='all .5'
+                      transitionDuration={500}
+                      containerClass='carousel-container'
+                      removeArrowOnDeviceType={['tablet', 'mobile']}
+                      deviceType={deviceType()}
+                      dotListClass='custom-dot-list-style'
+                      itemClass='carousel-item-padding-40-px'
+                    >
+                      {thumbnails.map((item) => {
+                        return (
+                          <div key={item.id}>
                             <img
-                              alt='example'
-                              src={item.images[0].small}
+                              src={item.url}
+                              alt=''
+                              loading='lazy'
                               style={{
-                                width: 240,
-                                height: 240,
+                                width: 600,
+                                height: 500,
                               }}
                             />
-                          }
-                        >
-                          <Meta
-                            title={item.name}
-                            description={item.description_short}
-                            style={{
-                              height: 120,
-                            }}
-                          />
-                          <Button
-                            type='link'
-                            // onClick={readMoreNearByActivity(item.slug)}
-                          >
-                            Read More
-                          </Button>
-                        </Card>
+                          </div>
+                        );
+                      })}
+                    </Carousel>
+                  </div>
+
+                  {/* ACTIVITY TITLE */}
+                  <Row>
+                    <Col span={12}>
+                      <h1>{currentActivity.name}</h1>
+                      <div>
+                        {currentActivity.labels.map((label) => {
+                          return <Tag color='default'>{label.name}</Tag>;
+                        })}
                       </div>
-                    );
-                  })}
+                    </Col>
+                  </Row>
+
+                  {/* ACTIVITY DESCRIPTION SHORT */}
+                  <div style={{ fontWeight: 'bold' }}>
+                    {currentActivity.description_short}
+                  </div>
+
+                  {/* ACTIVITY DESCRIPTION LONG */}
+                  <div>{currentActivity.description_long}</div>
+
+                  {/* MAPBOX */}
+                  <div>
+                    <Map
+                      mapboxAccessToken={
+                        process.env.REACT_APP_MAPBOX_ACESS_TOKEN
+                      }
+                      style={{
+                        width: '100%',
+                        height: '400px',
+                      }}
+                      initialViewState={{
+                        longitude: lng,
+                        latitude: lat,
+                        zoom: 14,
+                      }}
+                      mapStyle='mapbox://styles/mapbox/streets-v9'
+                    >
+                      <Marker longitude={lng} latitude={lat} />
+                      <NavigationControl />
+                      <GeolocateControl />
+                    </Map>
+                  </div>
+
+                  {/* NEARBY ACTIVITY */}
+                  <h1>Nearby Activities</h1>
+                  <div className='container'>
+                    <div className='row'>
+                      {trips.map((item) => {
+                        return (
+                          <div className='card' key={item.id}>
+                            <Card
+                              // extra={<a href='#'>Save</a>}
+                              hoverable
+                              style={{
+                                width: 240,
+                              }}
+                              cover={
+                                <img
+                                  alt='example'
+                                  src={item.images[0].small}
+                                  style={{
+                                    width: 240,
+                                    height: 240,
+                                  }}
+                                />
+                              }
+                            >
+                              <Meta
+                                title={item.name}
+                                description={item.description_short}
+                                style={{
+                                  height: 120,
+                                }}
+                              />
+                              <Button
+                                type='link'
+                                // onClick={readMoreNearByActivity(item.slug)}
+                              >
+                                Read More
+                              </Button>
+                            </Card>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className='spin-container'>
+                  <Spin className='spinner' />
                 </div>
-              </div>
+              )}
             </>
-          ) : (
-            <div className='spin-container'>
-              <Spin className='spinner' />
-            </div>
           )}
         </>
       )}

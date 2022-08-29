@@ -13,7 +13,7 @@ const LoginPage = ({ loggedInUser = false }) => {
     let response = await ApiService.login(data);
     if (response.status === 200 || response.status === 201) {
       form.resetFields();
-      navigate('/activity', { replace: true });
+      navigate('/activities/castle-of-gerald-the-devil', { replace: true });
 
       localStorage.setItem('jwt', response.data.jwt);
       localStorage.setItem('user', response.data.user);
