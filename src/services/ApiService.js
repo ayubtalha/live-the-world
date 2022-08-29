@@ -29,10 +29,10 @@ class ApiService {
       return err.response;
     }
   }
-  async getActivities() {
+  async getActivities(activitySlug) {
     let response = null;
     try {
-      response = await axios.get(GET_ACTIVITIES, {
+      response = await axios.get(GET_ACTIVITIES(activitySlug), {
         headers: { 'Content-Type': 'application/json' },
       });
       return response;

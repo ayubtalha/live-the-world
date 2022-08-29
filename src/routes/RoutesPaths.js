@@ -3,7 +3,7 @@ import { LoginPage } from '../pages';
 
 export const LTWRoutePaths = [
   {
-    path: '/activity',
+    path: '/activities/:activity_slug',
     element: <LTWActivity />,
   },
   {

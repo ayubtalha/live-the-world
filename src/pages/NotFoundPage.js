@@ -8,7 +8,11 @@ const NotFoundPage = () => {
       title='Seems like we are Lost!'
       subTitle='Sorry, the page you visited does not exist.'
       extra={
-        <Button id='app-content-nf-button' type='primary' href='/activity'>
+        <Button
+          id='app-content-nf-button'
+          type='primary'
+          href='/activities/castle-of-gerald-the-devil'
+        >
           Back Home
         </Button>
       }
