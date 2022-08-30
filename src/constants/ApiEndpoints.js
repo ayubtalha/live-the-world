@@ -8,3 +8,5 @@ export const GET_ACTIVITIES = (activity_slug) =>
 export const GET_TRIPS = `${LTW_API_URL}/frontend/trips`;
 export const GET_NEARBY_ACTIVITY = (activity_id) =>
   `${LTW_API_URL}/frontend/activities/nearby/${activity_id}`;
+export const ADD_EXISTING_FAV_TRIPS = `${LTW_API_URL}/frontend/trips/add_activity`;
+export const REMOVE_EXISTING_FAV_TRIPS = `${LTW_API_URL}/frontend/trips/remove_activity`;

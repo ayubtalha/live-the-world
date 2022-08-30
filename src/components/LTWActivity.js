@@ -27,6 +27,7 @@ export const LTWActivity = () => {
   const [lng, setLng] = useState(null);
   const [lat, setLat] = useState(null);
   const [showModalForCorrectUrl, setShowModalForCorrectUrl] = useState(false);
+  const [existingFavTrips, setExistingFavTrips] = useState([]);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt') ? true : false;
@@ -47,11 +48,7 @@ export const LTWActivity = () => {
             'castle-of-gerald-the-devil'
           ));
 
-      console.log('activities:', getActivitiesResponse);
-      if (
-        getActivitiesResponse.status === 200 ||
-        getActivitiesResponse.status === 201
-      ) {
+      if ([200, 201].includes(getActivitiesResponse.status)) {
         setCurrentActivity(getActivitiesResponse.data);
         setThumbNails(getActivitiesResponse.data.images);
         setLat(getActivitiesResponse.data.latitude);
@@ -61,11 +58,7 @@ export const LTWActivity = () => {
         let nearbyActivityResponse = await ApiService.getNearbyActivity(
           getActivitiesResponse.data.id
         );
-        console.log('trips:', nearbyActivityResponse);
-        if (
-          nearbyActivityResponse.status === 200 ||
-          nearbyActivityResponse.status === 201
-        ) {
+        if ([200, 201].includes(nearbyActivityResponse.status)) {
           setTrips(nearbyActivityResponse.data);
         }
       } else {
@@ -75,11 +68,9 @@ export const LTWActivity = () => {
 
     // GET TRIPS
     (async () => {
-      let getTripsResponse = await ApiService.getTrips();
-      console.log('trips:', getTripsResponse.data[0].activities);
-      if (getTripsResponse.status === 200 || getTripsResponse.status === 201) {
-        setTrips(getTripsResponse.data[0].activities);
-      }
+      let getExistingFavTripsResponse = await ApiService.getTrips();
+      if ([200, 201].includes(getExistingFavTripsResponse.status))
+        setExistingFavTrips(getExistingFavTripsResponse.data[0].activities);
     })();
 
     isMounted.current = true;
@@ -93,9 +84,34 @@ export const LTWActivity = () => {
     setLoggedInUser(false);
   };
 
-  console.log('thumbnails:', thumbnails);
-  console.log('currentActivity:', currentActivity);
-  console.log('trips:', trips);
+  // console.log('thumbnails:', thumbnails);
+  // console.log('currentActivity:', currentActivity);
+  // console.log('trips:', trips);
+  // console.log('getExistingFavTripsResponse:', existingFavTrips);
+
+  const updateFavExistingTrips = async (event, buttonText) => {
+    // UPDATE ACTIVITY FAV
+    const payloadData = {
+      activityId: currentActivity.id,
+      tripId: currentActivity.id,
+      tripType: 'favorite',
+    };
+    let updateExistingFavTripsResponse;
+    if (buttonText === 'Saved')
+      updateExistingFavTripsResponse =
+        await ApiService.removeActivityToExistingFavTrips(payloadData);
+    else
+      updateExistingFavTripsResponse =
+        await ApiService.addActivityToExistingFavTrips(payloadData);
+
+    // FETCH LATEST ACTIVITIES TO UPDATE SAVE BUTTON
+    if ([200, 201].includes(updateExistingFavTripsResponse.status)) {
+      let getExistingFavTripsResponse = await ApiService.getTrips();
+      if ([200, 201].includes(getExistingFavTripsResponse.status)) {
+        setExistingFavTrips(getExistingFavTripsResponse.data[0].activities);
+      }
+    }
+  };
 
   return (
     <div>
@@ -127,9 +143,22 @@ export const LTWActivity = () => {
                   <Button onClick={logout}>Logout</Button>
                   <Button
                     style={{ float: 'right', marginRight: 12 }}
-                    onClick={logout}
+                    onClick={(event) =>
+                      updateFavExistingTrips(
+                        event,
+                        existingFavTrips.filter(
+                          (item) => item.id === currentActivity.id
+                        ).length > 0
+                          ? 'Saved'
+                          : 'Save'
+                      )
+                    }
                   >
-                    Save
+                    {existingFavTrips.filter(
+                      (item) => item.id === currentActivity.id
+                    ).length > 0
+                      ? 'Saved'
+                      : 'Save'}
                   </Button>
 
                   {/* ACTIVITIES */}
@@ -176,7 +205,11 @@ export const LTWActivity = () => {
                       <h1>{currentActivity.name}</h1>
                       <div>
                         {currentActivity.labels.map((label) => {
-                          return <Tag color='default'>{label.name}</Tag>;
+                          return (
+                            <Tag color='default' key={label.id}>
+                              {label.name}
+                            </Tag>
+                          );
                         })}
                       </div>
                     </Col>
@@ -188,10 +221,12 @@ export const LTWActivity = () => {
                   </div>
 
                   {/* ACTIVITY DESCRIPTION LONG */}
-                  <div>{currentActivity.description_long}</div>
+                  <div style={{ whiteSpace: 'pre-wrap', paddingTop: 8 }}>
+                    {currentActivity.description_long}
+                  </div>
 
                   {/* MAPBOX */}
-                  <div>
+                  <div style={{ paddingTop: 8 }}>
                     <Map
                       mapboxAccessToken={
                         process.env.REACT_APP_MAPBOX_ACESS_TOKEN
