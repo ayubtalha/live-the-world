@@ -89,13 +89,14 @@ export const LTWActivity = () => {
   // console.log('trips:', trips);
   // console.log('getExistingFavTripsResponse:', existingFavTrips);
 
-  const updateFavExistingTrips = async (event, buttonText) => {
+  const updateFavExistingTrips = async (event, activityId, buttonText) => {
     // UPDATE ACTIVITY FAV
     const payloadData = {
-      activityId: currentActivity.id,
-      tripId: currentActivity.id,
+      activityId: activityId,
+      tripId: activityId,
       tripType: 'favorite',
     };
+
     let updateExistingFavTripsResponse;
     if (buttonText === 'Saved')
       updateExistingFavTripsResponse =
@@ -146,6 +147,7 @@ export const LTWActivity = () => {
                     onClick={(event) =>
                       updateFavExistingTrips(
                         event,
+                        currentActivity.id,
                         existingFavTrips.filter(
                           (item) => item.id === currentActivity.id
                         ).length > 0
@@ -256,7 +258,28 @@ export const LTWActivity = () => {
                         return (
                           <div className='card' key={item.id}>
                             <Card
-                              // extra={<a href='#'>Save</a>}
+                              extra={
+                                <Button
+                                  style={{ float: 'right', marginRight: 12 }}
+                                  onClick={(event) =>
+                                    updateFavExistingTrips(
+                                      event,
+                                      item.id,
+                                      existingFavTrips.filter(
+                                        (trips) => trips.id === item.id
+                                      ).length > 0
+                                        ? 'Saved'
+                                        : 'Save'
+                                    )
+                                  }
+                                >
+                                  {existingFavTrips.filter(
+                                    (trips) => trips.id === item.id
+                                  ).length > 0
+                                    ? 'Saved'
+                                    : 'Save'}
+                                </Button>
+                              }
                               hoverable
                               style={{
                                 width: 240,
