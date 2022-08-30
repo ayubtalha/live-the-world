@@ -28,6 +28,7 @@ export const LTWActivity = () => {
   const [lat, setLat] = useState(null);
   const [showModalForCorrectUrl, setShowModalForCorrectUrl] = useState(false);
   const [existingFavTrips, setExistingFavTrips] = useState([]);
+  const [favTripId, setFavTripId] = useState(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt') ? true : false;
@@ -69,8 +70,10 @@ export const LTWActivity = () => {
     // GET TRIPS
     (async () => {
       let getExistingFavTripsResponse = await ApiService.getTrips();
-      if ([200, 201].includes(getExistingFavTripsResponse.status))
+      if ([200, 201].includes(getExistingFavTripsResponse.status)) {
         setExistingFavTrips(getExistingFavTripsResponse.data[0].activities);
+        setFavTripId(getExistingFavTripsResponse.data[0].id);
+      }
     })();
 
     isMounted.current = true;
@@ -89,11 +92,16 @@ export const LTWActivity = () => {
   // console.log('trips:', trips);
   // console.log('getExistingFavTripsResponse:', existingFavTrips);
 
-  const updateFavExistingTrips = async (event, activityId, buttonText) => {
+  const updateFavExistingTrips = async (
+    event,
+    activityId,
+    tripId,
+    buttonText
+  ) => {
     // UPDATE ACTIVITY FAV
     const payloadData = {
       activityId: activityId,
-      tripId: activityId,
+      tripId: tripId,
       tripType: 'favorite',
     };
 
@@ -148,6 +156,7 @@ export const LTWActivity = () => {
                       updateFavExistingTrips(
                         event,
                         currentActivity.id,
+                        favTripId,
                         existingFavTrips.filter(
                           (item) => item.id === currentActivity.id
                         ).length > 0
@@ -265,6 +274,7 @@ export const LTWActivity = () => {
                                     updateFavExistingTrips(
                                       event,
                                       item.id,
+                                      favTripId,
                                       existingFavTrips.filter(
                                         (trips) => trips.id === item.id
                                       ).length > 0
