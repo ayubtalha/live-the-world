@@ -87,11 +87,6 @@ export const LTWActivity = () => {
     setLoggedInUser(false);
   };
 
-  // console.log('thumbnails:', thumbnails);
-  // console.log('currentActivity:', currentActivity);
-  // console.log('trips:', trips);
-  // console.log('getExistingFavTripsResponse:', existingFavTrips);
-
   const updateFavExistingTrips = async (
     event,
     activityId,
@@ -314,7 +309,13 @@ export const LTWActivity = () => {
                               />
                               <Button
                                 type='link'
-                                // onClick={readMoreNearByActivity(item.slug)}
+                                onClick={() =>
+                                  window.open(
+                                    `/activities/${item.slug}`,
+                                    '_blank',
+                                    'noopener,noreferrer'
+                                  )
+                                }
                               >
                                 Read More
                               </Button>
