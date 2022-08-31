@@ -31,6 +31,7 @@ export const LTWActivity = () => {
   const [favTripId, setFavTripId] = useState(null);
 
   useEffect(() => {
+    // JWT Token FOR AUTHENTICATION/LOGIN
     const jwt = localStorage.getItem('jwt') ? true : false;
     setLoggedInUser(jwt);
   }, [location]);
@@ -235,7 +236,7 @@ export const LTWActivity = () => {
                   <div style={{ paddingTop: 8 }}>
                     <Map
                       mapboxAccessToken={
-                        process.env.REACT_APP_MAPBOX_ACESS_TOKEN
+                        'pk.eyJ1IjoibXRhbGhhYXl1Yjc1MiIsImEiOiJjbDdkbm54cDUwanpiM25tcWZodndsb2o5In0.tIUTF8pcN3lOINdItmCz6A'
                       }
                       style={{
                         width: '100%',

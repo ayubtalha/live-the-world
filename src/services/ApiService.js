@@ -16,11 +16,7 @@ class ApiService {
     try {
       response = await axios.post(
         LOG_IN,
-        // { ...data }, [LTW-TODO]: Remove the dependecy from .env once project completed
-        {
-          identifier: process.env.REACT_APP_IDENTIFIER,
-          password: process.env.REACT_APP_PASSWORD,
-        },
+        { ...data },
         {
           headers: { 'Content-Type': 'application/json' },
         }
