@@ -1,4 +1,4 @@
-export const formValidationRules = {
+export const formValidation = {
   required: function (name) {
     return {
       required: true,
